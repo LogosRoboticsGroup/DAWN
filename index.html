@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="DAWN: Worlds Teach, Actions Execute. Decoupled World-to-Action Distillation for Robot Manipulation.">
+  <meta name="theme-color" content="#fbfbfa">
+  <meta property="og:title" content="DAWN — Worlds Teach, Actions Execute">
+  <meta property="og:description" content="Decoupled World-to-Action Distillation for Robot Manipulation">
+  <meta property="og:type" content="website">
+  <title>DAWN | Worlds Teach, Actions Execute</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=20261021-4">
+  <script src="site-config.js?v=20261021-4" defer></script>
+  <script src="app.js?v=20261021-4" defer></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <header class="site-header content-width">
+    <a class="wordmark" href="#" aria-label="DAWN home">DAWN</a>
+    <nav aria-label="Main navigation"><a href="#motivation">Motivation</a><a href="#method">Method</a><a href="#experiments">Real-world experiments</a><a href="#results">Results</a></nav>
+  </header>
+  <main id="main">
+    <section class="paper-header content-width" aria-labelledby="paper-title">
+      <h1 id="paper-title"><span class="title-main"><span class="title-name">DAWN</span>: Worlds Teach, Actions Execute</span><span class="title-subline">Decoupled World-to-Action Distillation<br class="title-break"> for Robot Manipulation</span></h1>
+      <div class="authors" id="authors"></div><div class="affiliations" id="affiliations"></div>
+      <figure class="overview-film">
+        <div class="platform-tabs" role="tablist" aria-label="Robot platform"><button type="button" role="tab" id="platform-ur5e" aria-controls="overview-ur5e" aria-selected="true" tabindex="0">Dual-arm UR5e</button><button type="button" role="tab" id="platform-arx" aria-controls="overview-arx" aria-selected="false" tabindex="-1">Dual-arm ARX ACONE</button></div>
+        <div id="overview-ur5e" class="platform-panel" role="tabpanel" aria-labelledby="platform-ur5e"><div class="overview-frame"><video id="hero-video" class="overview-video" src="assets/videos/overview-ur5e.mp4" poster="assets/images/overview-ur5e.jpg" autoplay loop muted playsinline preload="metadata" aria-label="Four UR5e tasks in a two-by-two overview"></video><button class="overview-toggle" type="button" aria-label="Pause overview video">Pause</button></div></div>
+        <div id="overview-arx" class="platform-panel" role="tabpanel" aria-labelledby="platform-arx" hidden><div class="overview-frame"><video id="hero-video-arx" class="overview-video" data-src="assets/videos/overview-arx.mp4" poster="assets/images/overview-arx.jpg" loop muted playsinline preload="none" aria-label="Two ARX ACONE tasks shown side by side"></video><button class="overview-toggle" type="button" aria-label="Play overview video">Play</button></div></div>
+        <figcaption>Accelerated 12-second overviews, grouped by robot platform.</figcaption>
+      </figure>
+    </section>
+
+    <section id="motivation" class="section content-width" aria-labelledby="motivation-title">
+      <h2 id="motivation-title">Motivation</h2>
+      <p class="insight-lead">A world model should <strong>teach during training</strong>, while an action model <strong>executes independently at inference</strong>.</p>
+      <p class="section-intro">Future visual predictions contain useful physical dynamics, but generating them at every control step adds computational cost. DAWN transfers the world model’s knowledge into the action policy during training, so deployment requires only the action model.</p>
+      <figure class="paper-figure insight-figure"><a href="assets/images/insight.png" target="_blank" rel="noopener" aria-label="Open full-resolution insight diagram"><img src="assets/images/insight.png" width="2400" height="823" alt="Comparison of World Action Models, efficient WAMs, and DAWN’s asymmetric training and inference paradigm" loading="lazy"></a><figcaption>DAWN separates future-dynamics supervision from action execution.</figcaption></figure>
+    </section>
+
+    <section id="method" class="section content-width" aria-labelledby="method-title">
+      <h2 id="method-title">Method</h2>
+      <p class="section-intro">A frozen world model provides future structural features. Dynamics-appearance disentangled distillation encourages the action model to absorb manipulation-relevant dynamics while the auxiliary pathway handles appearance.</p>
+      <figure class="paper-figure"><a href="assets/images/method.png" target="_blank" rel="noopener" aria-label="Open full-resolution framework diagram"><img src="assets/images/method.png" alt="DAWN’s action model, frozen world-model teacher, appearance generator and feature decoder" width="2400" height="871" loading="lazy"></a><figcaption>The world model, appearance generator, and feature decoder are used during training. At inference, only the action model remains.</figcaption></figure>
+      <div class="method-explanation"><div><h3>Dynamics-appearance disentanglement</h3><p>World-model features mix object motion, gripper changes, and contact transitions with textures, lighting, and backgrounds. An appearance pathway models visual detail, encouraging the action representation to encode the complementary dynamics relevant to control.</p><p>The teacher uses LTX-Video; the standalone policy uses a Qwen3-VL backbone and an MLP action head. The appearance pathway is initialized from InstructPix2Pix.</p></div><figure><a href="assets/images/disentangle.png" target="_blank" rel="noopener" aria-label="Open full-resolution distillation diagram"><img src="assets/images/disentangle.png" width="1600" height="939" loading="lazy" alt="Complementary appearance and dynamics learning in DAWN"></a></figure></div>
+    </section>
+
+    <section id="experiments" class="section experiments-section" aria-labelledby="experiments-title"><div class="content-width">
+      <h2 id="experiments-title">Real-world experiments</h2>
+      <figure class="robot-setup"><a href="assets/images/robots.png" target="_blank" rel="noopener" aria-label="Open robot platform image"><img src="assets/images/robots.png" width="913" height="450" alt="Dual-arm UR5e and dual-arm ARX ACONE platforms with head-mounted and wrist-mounted RealSense cameras" loading="lazy"></a><figcaption>Dual-arm UR5e (left) and dual-arm ARX ACONE (right). Each platform uses one head-mounted RGB camera and two wrist-mounted RGB cameras.</figcaption></figure>
+      <h3 class="gallery-heading">Task demonstrations</h3>
+      <div class="task-tabs" role="tablist" aria-label="Real-world manipulation tasks"><button type="button" role="tab" id="tab-insert-drill" aria-controls="panel-insert-drill" aria-selected="true" tabindex="0" data-index="0"><span>01</span>Insert the drill</button><button type="button" role="tab" id="tab-hang-towel" aria-controls="panel-hang-towel" aria-selected="false" tabindex="-1" data-index="1"><span>02</span>Hang the towel</button><button type="button" role="tab" id="tab-close-box" aria-controls="panel-close-box" aria-selected="false" tabindex="-1" data-index="2"><span>03</span>Chain & close box</button><button type="button" role="tab" id="tab-fold-cloth" aria-controls="panel-fold-cloth" aria-selected="false" tabindex="-1" data-index="3"><span>04</span>Fold the cloth</button><button type="button" role="tab" id="tab-fold-towel" aria-controls="panel-fold-towel" aria-selected="false" tabindex="-1" data-index="4"><span>05</span>Fold the towel</button><button type="button" role="tab" id="tab-stack-blocks" aria-controls="panel-stack-blocks" aria-selected="false" tabindex="-1" data-index="5"><span>06</span>Stack the blocks</button></div>
+      <div class="task-panels"><article class="task-panel" role="tabpanel" id="panel-insert-drill" aria-labelledby="tab-insert-drill" >
+      <div class="task-video"><video controls playsinline preload="none" poster="assets/images/insert-drill.jpg" data-src="assets/videos/insert-drill.mp4" aria-label="Insert the drill experiment"></video></div>
+      <div class="task-description"><span class="task-count">Task 1 / 6</span><h3>Insert the drill</h3><p>Insert the drill into the holder.</p><p class="video-speed">Rollouts are shown at 2× speed.</p></div>
+    </article><article class="task-panel" role="tabpanel" id="panel-hang-towel" aria-labelledby="tab-hang-towel" hidden>
+      <div class="task-video"><video controls playsinline preload="none" poster="assets/images/hang-towel.jpg" data-src="assets/videos/hang-towel.mp4" aria-label="Hang the towel experiment"></video></div>
+      <div class="task-description"><span class="task-count">Task 2 / 6</span><h3>Hang the towel</h3><p>Hang the towel on the hanger.</p><p class="video-speed">Rollouts are shown at 2× speed.</p></div>
+    </article><article class="task-panel" role="tabpanel" id="panel-close-box" aria-labelledby="tab-close-box" hidden>
+      <div class="task-video"><video controls playsinline preload="none" poster="assets/images/close-box.jpg" data-src="assets/videos/close-box.mp4" aria-label="Chain & close box experiment"></video></div>
+      <div class="task-description"><span class="task-count">Task 3 / 6</span><h3>Chain & close box</h3><p>Place the chain into the box and close the box.</p><p class="video-speed">Rollouts are shown at 2× speed.</p></div>
+    </article><article class="task-panel" role="tabpanel" id="panel-fold-cloth" aria-labelledby="tab-fold-cloth" hidden>
+      <div class="task-video"><video controls playsinline preload="none" poster="assets/images/fold-cloth.jpg" data-src="assets/videos/fold-cloth.mp4" aria-label="Fold the cloth experiment"></video></div>
+      <div class="task-description"><span class="task-count">Task 4 / 6</span><h3>Fold the cloth</h3><p>Fold the cloth on the tabletop.</p><p class="video-speed">Rollouts are shown at 2× speed.</p></div>
+    </article><article class="task-panel" role="tabpanel" id="panel-fold-towel" aria-labelledby="tab-fold-towel" hidden>
+      <div class="task-video"><video controls playsinline preload="none" poster="assets/images/fold-towel.jpg" data-src="assets/videos/fold-towel.mp4" aria-label="Fold the towel experiment"></video></div>
+      <div class="task-description"><span class="task-count">Task 5 / 6</span><h3>Fold the towel</h3><p>Fold the towel.</p><p class="video-speed">Rollouts are shown at 2× speed.</p></div>
+    </article><article class="task-panel" role="tabpanel" id="panel-stack-blocks" aria-labelledby="tab-stack-blocks" hidden>
+      <div class="task-video"><video controls playsinline preload="none" poster="assets/images/stack-blocks.jpg" data-src="assets/videos/stack-blocks.mp4" aria-label="Stack the blocks experiment"></video></div>
+      <div class="task-description"><span class="task-count">Task 6 / 6</span><h3>Stack the blocks</h3><p>Stack the blocks.</p><p class="video-speed">Rollouts are shown at 2× speed.</p></div>
+    </article></div>
+      <div class="gallery-pagination"><button type="button" id="previous-task" disabled>← Previous task</button><span id="task-position" aria-live="polite">1 / 6</span><button type="button" id="next-task">Next task →</button></div>
+
+      <section id="stack-ablation" class="ablation-video-section" aria-labelledby="stack-ablation-title"><h3 id="stack-ablation-title">Stack-blocks ablation</h3><p>Representative trials without world-model distillation, without disentanglement, and with the full DAWN model.</p><figure><video controls playsinline preload="none" poster="assets/images/stack-ablation.jpg" data-src="assets/videos/stack-ablation.mp4" aria-label="Stack-blocks comparison: without world-model distillation, without disentanglement, and full DAWN"></video><figcaption>The same additional 3× acceleration is applied to all clips. Shorter clips hold their final frame.</figcaption></figure></section>
+      <section id="failure" class="failure-section" aria-labelledby="failure-title"><h3 id="failure-title">Failure case: fold the towel</h3><div class="failure-layout"><div><video controls playsinline preload="none" poster="assets/images/failure-fold.jpg" data-src="assets/videos/failure-fold.mp4" aria-label="Unsuccessful towel-folding rollout"></video></div><div class="failure-explanation"><h4>Failure analysis</h4><p>The policy grasps and moves the towel, but does not complete the final fold. This illustrates a remaining failure mode in deformable-object manipulation.</p></div></div></section>
+    </div></section>
+
+    <section id="results" class="section content-width" aria-labelledby="results-title"><h2 id="results-title">Experimental results</h2><p class="section-intro">Evaluation on LIBERO, LIBERO-Plus, RoboTwin 2.0, and six real-world manipulation tasks.</p><div class="results-layout"><div class="results-main"><h3>Across simulation benchmarks</h3><div class="table-scroll"><table class="comparison-table"><caption class="sr-only">DAWN variants compared across three simulation benchmarks</caption><thead><tr><th scope="col">Method</th><th scope="col">LIBERO</th><th scope="col">LIBERO-Plus</th><th scope="col">RoboTwin 2.0</th></tr></thead><tbody><tr class="highlight"><th scope="row">DAWN <span class="table-tag">ACTION ONLY</span></th><td>97.2</td><td>78.7</td><td>71.3</td></tr><tr><th scope="row">DAWN w/ WM inference</th><td>97.3</td><td>78.5</td><td>71.5</td></tr><tr><th scope="row">DAWN w/o WM distillation</th><td>96.6</td><td>75.4</td><td>57.1</td></tr></tbody></table></div><p class="table-note">LIBERO: 40 tasks, 50 episodes per task. LIBERO-Plus: seven perturbation dimensions without fine-tuning. RoboTwin 2.0: ten jointly trained tasks in the clean setting.</p></div><aside class="efficiency"><h3>Inference efficiency</h3><div class="latency-row"><span>Fast-WAM</span><span>442.0 ms</span></div><div class="bar"><span style="width:100%"></span></div><div class="latency-row"><span>DAWN w/ WM inference</span><span>148.5 ms</span></div><div class="bar"><span style="width:33.6%"></span></div><div class="latency-row accent"><strong>DAWN</strong><strong>79.6 ms</strong></div><div class="bar accent"><span style="width:18%"></span></div><p>Single NVIDIA RTX 4090.<br>Averaged over ten runs.<br><strong>1.9× faster</strong> than DAWN with world-model inference.</p></aside></div>
+      <div class="real-results"><div class="real-result-intro"><h3>Real-world comparison</h3><p>Six tasks, evaluated over 20 trials each. All methods use 300 demonstrations per task.</p></div><div class="table-scroll"><table class="comparison-table real-table"><caption class="sr-only">Real-world success counts out of twenty trials</caption><thead><tr><th scope="col">Task</th><th scope="col">GR00T N1.5</th><th scope="col">VPP</th><th scope="col">DAWN</th></tr></thead><tbody><tr><th scope="row">Insert drill</th><td>10/20</td><td>6/20</td><td><strong>11/20</strong></td></tr><tr><th scope="row">Hang towel</th><td>13/20</td><td>8/20</td><td><strong>15/20</strong></td></tr><tr><th scope="row">Chain & close box</th><td><strong>16/20</strong></td><td>10/20</td><td><strong>16/20</strong></td></tr><tr><th scope="row">Fold cloth</th><td><strong>14/20</strong></td><td>7/20</td><td>13/20</td></tr><tr><th scope="row">Fold towel</th><td>11/20</td><td>5/20</td><td><strong>14/20</strong></td></tr><tr><th scope="row">Stack blocks</th><td><strong>18/20</strong></td><td>15/20</td><td><strong>18/20</strong></td></tr><tr class="highlight"><th scope="row">Average success</th><td>68.3%</td><td>42.5%</td><td><strong>72.5%</strong></td></tr></tbody></table></div></div>
+      <div class="ablation-row"><div><h3>Real-world ablation</h3><p>Stack the Blocks: 300 demonstrations and 20 trials with blocks placed at extreme positions.</p></div><div class="ablation-values"><div><strong>8<span>/20</span></strong><p>Without world-model<br>distillation</p></div><div><strong>15<span>/20</span></strong><p>Without<br>disentanglement</p></div><div class="accent"><strong>18<span>/20</span></strong><p>Full<br>DAWN</p></div></div></div>
+</section>
+  </main>
+  <footer class="content-width"><a class="wordmark" href="#">DAWN</a><span>Decoupled Action from World kNowledge</span><a href="#">Back to top ↑</a></footer>
+</body>
+</html>
