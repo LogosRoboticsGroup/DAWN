@@ -15,7 +15,7 @@ window.DAWN_CONFIG = {
     { id: '2', name: 'Shanghai Innovation Institute' },
     { id: '3', name: 'University of Surrey' },
   ],
-  paperUrl: '', // e.g. 'assets/paper.pdf' or an arXiv URL
+  paperUrl: 'assets/DAWN.pdf',
   codeUrl: '',
   contactEmail: '',
 };
